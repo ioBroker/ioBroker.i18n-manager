@@ -44,7 +44,7 @@ app.on('ready', () => {
   loadMenu();
   const window = createWindow();
 
-  installDevTools();
+  // installDevTools();
   openConsole(window);
 });
 

@@ -23,6 +23,7 @@ export const createWindow = (): BrowserWindow => {
     icon: '../icons/icon.png',
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 

@@ -8,6 +8,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'array-element-newline': ['error', 'consistent'],
+    'prettier/prettier': ['off', { endofline: 'auto' }],
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',

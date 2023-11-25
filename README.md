@@ -7,16 +7,17 @@
 ![GitHub Releases](https://img.shields.io/github/downloads/gilmarsquinelato/i18n-manager/latest/total)
 
 ------
-# WARNING!
+
+# WARNING
 
 This project has entered on looking for new owner stage.
 
-Developing this tool has being great, but recently I ([@gilmarsquinelato](https://github.com/gilmarsquinelato)) am not contributing too much with it, and I don't think it's fair to the people that are 
+Developing this tool has being great, but recently I ([@gilmarsquinelato](https://github.com/gilmarsquinelato)) am not contributing too much with it, and I don't think it's fair to the people that are
 using this tool, so I am stopping to contribute with this tool and happy to transfer the project to the people that really wants to keep maintaining it.
 
 Thank you!
 
------- 
+------
 
 This app was developed with the objective to help the developers to manage the app translations.
 
@@ -56,9 +57,19 @@ Any type of contributions are welcome.
 
 ```yarn start```
 
+OPPURE
+```1 - cross-env NODE_ENV=development yarn start:web```
+
+```2 - cross-env NODE_ENV=development yarn start:main```
+
 ## Building
 
 ```yarn build```
+
+OPPURE
+```npm run build:win```
+```npm run build:mac``` (serve un mac)
+```npm run build:linux```
 
 ## Contributors
 

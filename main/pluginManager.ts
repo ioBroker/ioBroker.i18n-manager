@@ -52,9 +52,9 @@ export const saveFile = async (parsedFile: ParsedFile): Promise<boolean> => {
     const fileContent = await readFileAsync(parsedFile.filePath);
     const data = await plugin.parse(fileContent.toString());
     const updatedData = mergeDrop(data, parsedFile.data);
+    const sortedData = sortObjectDeeply(updatedData);
 
-
-    const serializedContent = await plugin.serialize(updatedData);
+    const serializedContent = await plugin.serialize(sortedData);
     if (serializedContent === null) {
       return false;
     }
@@ -65,6 +65,23 @@ export const saveFile = async (parsedFile: ParsedFile): Promise<boolean> => {
     console.log(e);
     return false;
   }
+};
+
+export const order = (unordered: any) =>
+  Object.keys(unordered)
+    .sort()
+    .reduce((obj, key) => {
+      (obj as any)[key] = (unordered as any)[key];
+      return obj;
+    }, {});
+
+export const sortObjectDeeply = (object: any) => {
+  for (let [key, value] of Object.entries(object)) {
+    if (typeof value === 'object') {
+      (object as any)[key] = sortObjectDeeply(value);
+    }
+  }
+  return order(object);
 };
 
 /**

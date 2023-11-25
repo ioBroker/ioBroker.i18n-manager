@@ -12,8 +12,11 @@
   "module": "commonjs",
   "homepage": "./",
   "scripts": {
-    "start": "cross-env NODE_ENV=development yarn start:main & yarn start:web",
+    "start": "cross-env NODE_ENV=development yarn start:main && yarn start:web",
     "build": "cross-env NODE_ENV=production yarn build:all && electron-builder -wml",
+    "build-win": "cross-env NODE_ENV=production yarn build:all && electron-builder -w",
+    "build-mac": "cross-env NODE_ENV=production yarn build:all && electron-builder -m",
+    "build-linux": "cross-env NODE_ENV=production yarn build:all && electron-builder -l",
     "start:web": "vue-cli-service serve",
     "build:web": "vue-cli-service build",
     "start:main": "yarn build:main && electron --inspect=9229 --remote-debugging-port=9222 .",
@@ -22,8 +25,8 @@
     "build:all": "yarn clean && yarn build:web && yarn build:main",
     "postinstall": "electron-builder install-app-deps",
     "clean": "rimraf build dist",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn run snyk-protect"
+    "snyk-protect": "",
+    "prepare": ""
   },
   "devDependencies": {
     "@sentry/cli": "^1.46.0",
@@ -97,9 +100,6 @@
     ],
     "icon": "./icons/icon.png",
     "mac": {
-      "publish": [
-        "github"
-      ],
       "category": "public.app-category.developer-tools",
       "target": [
         "dmg"
@@ -118,16 +118,11 @@
       }
     },
     "linux": {
-      "publish": [
-        "github"
-      ],
       "category": "Development"
     },
     "win": {
-      "publish": [
-        "github"
-      ]
+      "target": "portable"
     }
   },
-  "snyk": true
+  "snyk": false
 }

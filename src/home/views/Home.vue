@@ -25,12 +25,10 @@
         <v-card>
           <v-card-title>Version</v-card-title>
           <v-card-text>
-            <span>Current version: {{ currentVersion }}</span>
-            <div v-if="latestVersion.length > 0 && currentVersion !== latestVersion">
-              <strong>New version available ({{ latestVersion }})!</strong>
-              &nbsp;
-              <RemoteLink href="https://www.electronjs.org/apps/i18n-manager">Download</RemoteLink>
-            </div>
+            <span
+              >Current version: {{ currentVersion }} - modded by
+              <a href="mailto:djmiky69@gmail.com">Michele Granato</a></span
+            >
           </v-card-text>
           <v-card-actions>
             <span>Did you like this project? Please give a star</span>
@@ -80,7 +78,7 @@
       }
 
       sendIpc(ipcMessages.recentFolders);
-      checkVersion();
+      //checkVersion();
 
       return {
         recentFolders,

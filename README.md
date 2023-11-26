@@ -53,6 +53,10 @@ Any type of contributions are welcome.
 
 ![](./screenshots/pic-3.png)
 
+## Setup
+
+```yarn install```
+
 ## Developing
 
 ```yarn start```

@@ -27,6 +27,9 @@
         <v-list-item v-if="isItemOrNode()" @click="deleteItem">
           <v-list-item-title>Delete</v-list-item-title>
         </v-list-item>
+        <v-list-item v-if="isItemOrNode()" @click="copyItemPath">
+          <v-list-item-title>Copy path</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
 
@@ -100,7 +103,8 @@
       const sendModifiedContent = () => emit('send-modified-content');
 
       watch([siblings, itemLabel], () => {
-        isValidLabel.value = siblings.value.filter(it => it.label === itemLabel.value).length === 0;
+        isValidLabel.value =
+          siblings.value.filter((it) => it.label === itemLabel.value).length === 0;
       });
 
       const getItemType = () => clickedItem.value?.type;
@@ -121,7 +125,7 @@
 
       const addItemStart = (isItem: boolean) => () => {
         finishAction.value = addItemFinish(isItem);
-        siblings.value = props.treeItems.filter(it => it.parent === clickedItem.value!.id);
+        siblings.value = props.treeItems.filter((it) => it.parent === clickedItem.value!.id);
         actionTitle.value = 'Add Item';
         showDialog();
         focusLabelInput();
@@ -159,7 +163,7 @@
         copyItem();
 
         finishAction.value = pasteItemFinish;
-        siblings.value = props.treeItems.filter(it => it.parent === clickedItem.value!.parent);
+        siblings.value = props.treeItems.filter((it) => it.parent === clickedItem.value!.parent);
         actionTitle.value = 'Duplicate Item';
         itemLabel.value = clickedItem.value!.label;
         clickedItem.value = props.tree[clickedItem.value!.parent];
@@ -170,7 +174,7 @@
 
       const pasteItem = () => {
         finishAction.value = pasteItemFinish;
-        siblings.value = props.treeItems.filter(it => it.parent === clickedItem.value!.id);
+        siblings.value = props.treeItems.filter((it) => it.parent === clickedItem.value!.id);
         actionTitle.value = 'Paste Item';
         itemLabel.value = props.tree[props.clipboardItemId!]?.label;
 
@@ -192,7 +196,7 @@
         finishAction.value = renameItemFinish;
 
         siblings.value = props.treeItems.filter(
-          it => it.parent === clickedItem.value!.parent && it.id !== clickedItem.value!.id,
+          (it) => it.parent === clickedItem.value!.parent && it.id !== clickedItem.value!.id,
         );
         actionTitle.value = 'Rename Item';
         itemLabel.value = clickedItem.value!.label;
@@ -220,6 +224,17 @@
         }
       };
 
+      const copyItemPath = () => {
+        let path = '';
+        for (let i = 0; i < clickedItem.value!.level; i++) {
+          if (i > 0) {
+            path = '.'.concat(path);
+          }
+          path = clickedItem.value!.path[clickedItem.value!.path.length - 1 - i].concat(path);
+        }
+        navigator.clipboard.writeText(path);
+      };
+
       return {
         ...contextMenu,
         isDialogVisible,
@@ -240,6 +255,7 @@
         pasteItem,
         renameItem,
         deleteItem,
+        copyItemPath,
         finishAction,
         cancelAction,
       };

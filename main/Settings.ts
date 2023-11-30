@@ -11,6 +11,7 @@ export const defaultSettings: Settings = {
   },
   customSettings: {
     googleTranslateApiKey: '',
+    spacesIndentation: '2',
   },
   recentFolders: [],
 };

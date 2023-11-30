@@ -7,16 +7,10 @@ export interface IPlugin {
   serialize: (data: any) => Promise<string | undefined>;
 }
 
-let plugins: IPlugin[] = [
-  jsonPlugin,
-  yamlPlugin,
-];
+let plugins: IPlugin[] = [jsonPlugin, yamlPlugin];
 
 export const loadPlugins = (additionalPlugins: IPlugin[]) => {
-  plugins = [
-    ...additionalPlugins,
-    ...plugins,
-  ];
+  plugins = [...additionalPlugins, ...plugins];
 };
 
 export default () => plugins;

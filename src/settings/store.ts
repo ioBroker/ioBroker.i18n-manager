@@ -10,6 +10,7 @@ import * as ipcMessages from '@common/ipcMessages';
 export default class SettingsModule extends VuexModule {
   settings: CustomSettings = {
     googleTranslateApiKey: '',
+    spacesIndentation: '2',
   };
 
   @Action({ commit: 'setSettings' })

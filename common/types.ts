@@ -10,6 +10,8 @@ export interface Settings {
 export interface CustomSettings {
   googleTranslateApiKey: string;
   spacesIndentation: string;
+  translationFrom: string;
+  translationTo: string[];
 }
 
 export interface LoadedPath {

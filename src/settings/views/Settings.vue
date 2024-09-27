@@ -45,6 +45,16 @@
           <div class="px-2">
             <RemoteLink href="https://console.cloud.google.com/apis/credentials/wizard?api=translate.googleapis.com" />
           </div>
+          <v-row>
+            <v-col class="px-5 pb-3">
+              <v-text-field
+                v-model="settings.translationFrom"
+                label="translation from"
+                hide-details
+                outlined
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-spacer />

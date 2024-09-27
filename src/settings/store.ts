@@ -11,6 +11,8 @@ export default class SettingsModule extends VuexModule {
   settings: CustomSettings = {
     googleTranslateApiKey: '',
     spacesIndentation: '2',
+    translationFrom: 'en',
+    translationTo: [],
   };
 
   @Action({ commit: 'setSettings' })

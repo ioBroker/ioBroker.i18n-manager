@@ -7,7 +7,8 @@
           <v-col>
             <v-autocomplete
               label="From"
-              v-model="source"
+              v-model="settings.translationFrom"
+              v-on:change="handleChange"
               :items="languageList"
               item-disabled="disabled"
               item-text="label"
@@ -23,7 +24,8 @@
           <v-col cols="10" class="pb-0">
             <v-autocomplete
               label="To"
-              v-model="targets"
+              v-model="settings.translationTo"
+              v-on:change="handleChange"
               :items="languageList"
               item-disabled="disabled"
               item-text="label"
@@ -63,12 +65,17 @@
         </v-row>
       </v-expansion-panel-content>
     </v-expansion-panel>
+    <v-btn v-if="isTranslationEnabled" color="primary" @click="translate">
+      Translate
+    </v-btn>
   </v-expansion-panels>
 </template>
 
 <script lang="ts">
   import { defineComponent, ref, watch } from '@vue/composition-api';
   import { LanguageListItem, TranslatePayload, TreeItem } from '../types';
+import { useNamespace } from '@/store/utils';
+import { CustomSettings } from '@common/types';
 
   export default defineComponent({
     name: 'Translate',
@@ -81,13 +88,20 @@
       isTranslationEnabled: Boolean,
     },
     setup(props, { emit }) {
-      const source = ref('');
-      const targets = ref<string[]>([]);
+      // const source = ref('');
+      
+      const settingsModule = useNamespace('settings');
+      const settings = settingsModule.useState<CustomSettings>('settings', { immediate: true });
+      const saveSettings = settingsModule.useAction('saveSettings');
       const mode = ref<'all' | 'this' | ''>('');
       const overwrite = ref(false);
 
+      async function handleChange() {
+        await saveSettings(settings.value);
+      }
+
       function selectAll() {
-        targets.value = props.languageList.filter(it => !it.disabled).map(it => it.language);
+        settings.value.translationTo = props.languageList.filter(it => !it.disabled).map(it => it.language);
       }
 
       watch(mode, (current, previous) => {
@@ -112,14 +126,14 @@
         emit('translate', {
           mode: mode.value,
           overwrite: overwrite.value,
-          sourceLanguage: source.value,
-          targetLanguages: targets.value,
+          sourceLanguage: settings.value.translationFrom,
+          targetLanguages: settings.value.translationTo,
         } as TranslatePayload);
       }
 
       return {
-        source,
-        targets,
+        settings,
+        handleChange,
         mode,
         overwrite,
         selectAll,

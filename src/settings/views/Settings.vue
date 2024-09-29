@@ -34,6 +34,17 @@
           </v-row>
           <v-row>
             <v-col class="px-5 pb-3">
+              <v-select
+                v-model="settings.translationEngine"
+                label="Translation Engine"
+                :items="['google', 'deepl', 'aws', 'iobroker']"
+                hide-details
+                outlined
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="px-5 pb-3">
               <v-text-field
                 v-model="settings.googleTranslateApiKey"
                 label="Google Translate™ API Key"
@@ -45,6 +56,36 @@
           <div class="px-2">
             <RemoteLink href="https://console.cloud.google.com/apis/credentials/wizard?api=translate.googleapis.com" />
           </div>
+          <v-row>
+            <v-col class="px-5 pb-3">
+              <v-text-field
+                v-model="settings.deepLTranslateApiKey"
+                label="DeepL translate API Key"
+                hide-details
+                outlined
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="px-5 pb-3">
+              <v-text-field
+                v-model="settings.awsTranslateApiKey"
+                label="AWS Translate API Key"
+                hide-details
+                outlined
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="px-5 pb-3">
+              <v-text-field
+                v-model="settings.iobrokerTranslateApiKey"
+                label="ioBroker translate API Key"
+                hide-details
+                outlined
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col class="px-5 pb-3">
               <v-text-field

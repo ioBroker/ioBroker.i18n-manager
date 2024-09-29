@@ -9,10 +9,16 @@ import * as ipcMessages from '@common/ipcMessages';
 })
 export default class SettingsModule extends VuexModule {
   settings: CustomSettings = {
+    translationEngine: 'google',
     googleTranslateApiKey: '',
+    awsTranslateApiKey: '',
+    deepLTranslateApiKey: '',
+    iobrokerTranslateApiKey: '',
     spacesIndentation: '2',
     translationFrom: 'en',
     translationTo: [],
+    translationMode: 'this',
+    translationOverwrite: false,
   };
 
   @Action({ commit: 'setSettings' })

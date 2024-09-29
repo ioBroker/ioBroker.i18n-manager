@@ -8,10 +8,16 @@ export interface Settings {
 }
 
 export interface CustomSettings {
+  translationEngine: string;
   googleTranslateApiKey: string;
+  awsTranslateApiKey: string;
+  deepLTranslateApiKey: string;
+  iobrokerTranslateApiKey: string;
   spacesIndentation: string;
   translationFrom: string;
   translationTo: string[];
+  translationMode: 'all' | 'this';
+  translationOverwrite: boolean;
 }
 
 export interface LoadedPath {

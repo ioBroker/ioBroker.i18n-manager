@@ -46,13 +46,13 @@
         </v-row>
         <v-row align="center">
           <v-col cols="3" class="pt-0">
-            <v-radio-group v-model="mode">
+            <v-radio-group v-model="settings.translationMode" v-on:change="handleChange">
               <v-radio label="This Key" value="this" :disabled="!selectedItem" />
               <v-radio label="All Keys" value="all" class="all-keys" />
             </v-radio-group>
           </v-col>
           <v-col cols="4" class="pt-0">
-            <v-checkbox label="Overwrite not empty fields" v-model="overwrite" />
+            <v-checkbox label="Overwrite not empty fields" v-model="settings.translationOverwrite" v-on:change="handleChange" />
           </v-col>
           <v-col class="pt-0">
             <v-btn v-if="isTranslationEnabled" color="primary" @click="translate">
@@ -93,8 +93,6 @@ import { CustomSettings } from '@common/types';
       const settingsModule = useNamespace('settings');
       const settings = settingsModule.useState<CustomSettings>('settings', { immediate: true });
       const saveSettings = settingsModule.useAction('saveSettings');
-      const mode = ref<'all' | 'this' | ''>('');
-      const overwrite = ref(false);
 
       async function handleChange() {
         await saveSettings(settings.value);
@@ -104,28 +102,28 @@ import { CustomSettings } from '@common/types';
         settings.value.translationTo = props.languageList.filter(it => !it.disabled).map(it => it.language);
       }
 
-      watch(mode, (current, previous) => {
-        if (current === 'all' && overwrite.value) {
+      watch(() => settings.value.translationMode, (current, previous) => {
+        if (current === 'all' && settings.value.translationOverwrite) {
           const result = confirm(xOptionSelectedWarningMessage('Overwrite'));
           if (!result) {
-            mode.value = previous;
+            settings.value.translationMode = 'this'
           }
         }
       });
 
-      watch(overwrite, (current, previous) => {
-        if (current && mode.value === 'all') {
+      watch(() => settings.value.translationOverwrite, (current, previous) => {
+        if (current && settings.value.translationMode === 'all') {
           const result = confirm(xOptionSelectedWarningMessage('All Keys'));
           if (!result) {
-            overwrite.value = previous;
+            settings.value.translationOverwrite = false
           }
         }
       });
 
       function translate() {
         emit('translate', {
-          mode: mode.value,
-          overwrite: overwrite.value,
+          mode: settings.value.translationMode,
+          overwrite: settings.value.translationOverwrite,
           sourceLanguage: settings.value.translationFrom,
           targetLanguages: settings.value.translationTo,
         } as TranslatePayload);
@@ -134,8 +132,6 @@ import { CustomSettings } from '@common/types';
       return {
         settings,
         handleChange,
-        mode,
-        overwrite,
         selectAll,
         translate,
       };

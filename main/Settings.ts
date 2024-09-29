@@ -10,10 +10,16 @@ export const defaultSettings: Settings = {
     height: 768,
   },
   customSettings: {
+    translationEngine: 'google',
     googleTranslateApiKey: '',
+    awsTranslateApiKey: '',
+    deepLTranslateApiKey: '',
+    iobrokerTranslateApiKey: '',
     spacesIndentation: '2',
     translationFrom: 'en',
     translationTo: ['en'],
+    translationMode: 'this',
+    translationOverwrite: false,
   },
   recentFolders: [],
 };

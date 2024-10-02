@@ -1,7 +1,7 @@
 import router from '@/router';
 import { sendIpc } from '@/store/plugins/ipc';
 import * as ipcMessages from '@common/ipcMessages';
-import { LoadedPath } from '@common/types';
+import { CustomSettings, LoadedPath } from '@common/types';
 import axios, { CancelTokenSource } from 'axios';
 import deepEqual from 'fast-deep-equal';
 import _ from 'lodash/fp';
@@ -33,7 +33,7 @@ const GOOGLE_TRANSLATE_LANGUAGES_URL =
 @Module({
   namespaced: true,
 })
-export default class FolderModule extends VuexModule {
+export default class FolderModule extends VuexModule<any, {settings: {settings: CustomSettings}}> {
   tree: TreeMap = {};
   folder: LoadedPath[] = [];
   originalFolder: LoadedPath[] = [];
@@ -274,7 +274,7 @@ export default class FolderModule extends VuexModule {
           item.sourceLanguage,
           item.targetLanguage,
           item.formattedPath,
-          googleTranslateApiKey,
+          this.context.rootState.settings.settings,
           this.cancelToken!,
         );
         const end = new Date().getTime();

@@ -65,9 +65,12 @@
         </v-row>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-btn v-if="isTranslationEnabled" color="primary" @click="translate">
-      Translate
-    </v-btn>
+    <div style="display: flex; align-items: center;">
+      {{ hint() }}
+      <v-btn v-if="isTranslationEnabled" color="primary" @click="translate">
+        Translate
+      </v-btn>
+    </div>
   </v-expansion-panels>
 </template>
 
@@ -129,11 +132,19 @@ import { CustomSettings } from '@common/types';
         } as TranslatePayload);
       }
 
+      const hint = () => {
+        return settings.value.translationFrom + ' -> ' + settings.value.translationTo.join(', ') + 
+        ' (' + settings.value.translationEngine + ')' +
+        ' | ' + (settings.value.translationMode === 'all' ? 'All Keys' : 'This Key') + 
+        (settings.value.translationOverwrite ? ' | Overwrite not empty fields' : '')
+      }
+
       return {
         settings,
         handleChange,
         selectAll,
         translate,
+        hint,
       };
     },
   });

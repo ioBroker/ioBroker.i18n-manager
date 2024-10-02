@@ -21,6 +21,7 @@ export const loadFolder = async (folderPath: string): Promise<LoadedPath[]> => {
   const stats = await getFolderStats(folderPath, folderContent);
 
   const groupedFiles = await getGroupedFiles(folderPath, folderContent, stats);
+  console.log('test')
   const groupedLanguageFolders = await getGroupedLanguageFolders(folderPath, folderContent, stats);
   const subFolders = await getSubFolders(folderPath, folderContent, stats);
 

@@ -8,7 +8,7 @@ export interface Settings {
 }
 
 export interface CustomSettings {
-  translationEngine: string;
+  translationEngine: 'google' | 'deepl' | 'aws' | 'iobroker';
   googleTranslateApiKey: string;
   awsTranslateApiKey: string;
   deepLTranslateApiKey: string;

@@ -33,6 +33,11 @@
                   dense
                 />
               </v-col>
+              <v-col v-if="isFolders()">
+                <v-btn color="#dddddd" class="black--text" @click="onConvert">
+                  Convert folders
+                </v-btn>
+              </v-col>
             </v-row>
           </v-toolbar>
         </v-card>
@@ -156,7 +161,7 @@ import {
   TreeMap,
 } from '@/folder/types';
 import { useNamespace } from '@/store/utils';
-import { CustomSettings, LoadedPath } from '@common/types';
+import { CustomSettings, LoadedFolder, LoadedGroup, LoadedPath } from '@common/types';
 import useTree from './compositions/tree';
 
 import Content from '../../components/Content.vue';
@@ -164,6 +169,10 @@ import Translate from '../../components/Translate.vue';
 import TranslationProgressPanel from '../../components/TranslationProgressPanel.vue';
 import Tree from '../../components/Tree.vue';
 import ContextMenu from '../../components/ContextMenu.vue';
+import { getParsedFiles } from '@/folder/utils/files';
+import { writeFileSync } from 'fs';
+import { sendIpc } from '@/store/plugins/ipc';
+import { convert } from '@common/ipcMessages';
 
 export default defineComponent({
   name: 'Folder',
@@ -178,7 +187,7 @@ export default defineComponent({
     const folderModule = useNamespace('folder');
     const tree = folderModule.useState<TreeMap>('tree');
     const treeItems = folderModule.useGetter<TreeItem[]>('treeItems');
-    const folder = folderModule.useState<LoadedPath[]>('folder');
+    const folder = folderModule.useState<LoadedGroup[]>('folder');
     const originalFolder = folderModule.useState<LoadedPath[]>('originalFolder');
     const selectedItem = folderModule.useState<TreeItem>('selectedItem');
     const sendModifiedContent = folderModule.useAction('sendModifiedContent');
@@ -204,6 +213,17 @@ export default defineComponent({
     const pasteItem = folderModule.useMutation('pasteItem');
     const clipboardItemId = folderModule.useState<string>('clipboardItemId');
     const clipboardItemAction = folderModule.useState<ClipboardItemAction>('clipboardItemAction');
+
+    const onConvert = () => {
+      sendIpc(convert, folder.value[0]?.items.map(item => ({
+        path: item.filePath,
+        language: item.language,
+      })));
+    }
+
+    const isFolders = () => {
+      return folder.value[0]?.items.find(item => item.filePath.match(/translations\.json$/));
+    }
 
     const treeComposition = useTree(tree, treeItems, folder);
 
@@ -262,6 +282,7 @@ export default defineComponent({
       setClipboard,
       sendModifiedContent,
       selectedItemPath,
+      onConvert,
 
       languageList,
       isTranslationEnabled,
@@ -273,6 +294,7 @@ export default defineComponent({
       cancelTranslate,
 
       isSaving,
+      isFolders,
 
       clipboardItemId,
       clipboardItemAction,
@@ -364,5 +386,8 @@ export default defineComponent({
       overflow: visible;
     }
   }
+}
+.light-button {
+  color: black;
 }
 </style>

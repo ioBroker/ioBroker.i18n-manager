@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, CancelTokenSource, Method } from 'axios';
 import _ from 'lodash/fp';
 import { Commit } from 'vuex';
 
-import { LoadedPath } from '@common/types';
+import { CustomSettings, LoadedPath } from '@common/types';
 import { TranslatePayload, TranslationError, TreeItem } from '../types';
 import { getFormattedPath, getParsedFiles } from './files';
 import { getLanguageLabel, getLanguagePath } from './language';
@@ -14,7 +14,7 @@ export const translate = async (
   source: string,
   target: string,
   path: string[],
-  googleTranslateApiKey: string,
+  settings: CustomSettings,
   cancelToken: CancelTokenSource,
 ): Promise<string | TranslationError | undefined> => {
   // Google translate doesn't support localized languages
@@ -26,28 +26,43 @@ export const translate = async (
   }
 
   try {
-    const response = await fetchAPI(
-      `${GOOGLE_TRANSLATE_URL}?key=${googleTranslateApiKey}`,
-      'POST',
-      {
-        target: targetLanguage,
-        source: sourceLanguage,
-        q: text,
-        format: 'text',
-      },
-      {
-        cancelToken: cancelToken.token,
-      },
-    );
+    if (settings.translationEngine === 'iobroker') {
+      const response = await fetchAPI(
+        'https://translator.iobroker.in',
+        'POST',
+        {
+          text
+        }
+      );
+      return response.data[targetLanguage];
+    } else if (settings.translationEngine === 'deepl') {
+    
+    } else if (settings.translationEngine === 'aws') {
 
-    if (response.status === 200) {
-      return getGoogleTranslateText(response.data);
+    } else {
+      const response = await fetchAPI(
+        `${GOOGLE_TRANSLATE_URL}?key=${settings.googleTranslateApiKey}`,
+        'POST',
+        {
+          target: targetLanguage,
+          source: sourceLanguage,
+          q: text,
+          format: 'text',
+        },
+        {
+          cancelToken: cancelToken.token,
+        },
+      );
+
+      if (response.status === 200) {
+        return getGoogleTranslateText(response.data);
+      }
+
+      return {
+        path,
+        error: TRANSLATE_ERRORS.genericGoogleTranslateError(sourceLanguage, targetLanguage),
+      };
     }
-
-    return {
-      path,
-      error: TRANSLATE_ERRORS.genericGoogleTranslateError(sourceLanguage, targetLanguage),
-    };
   } catch (e) {
     if (axios.isCancel(e)) {
       throw e;

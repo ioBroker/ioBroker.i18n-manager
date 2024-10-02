@@ -5,6 +5,7 @@ import { ParsedFile } from '../common/types';
 import * as fileManager from './fileManager';
 import * as settings from './Settings';
 import * as windowManager from './windowManager';
+import { readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'fs';
 
 const onSave = async (e: any, data: any) => {
   const window = BrowserWindow.fromWebContents(e.sender);
@@ -44,6 +45,21 @@ const onOpen = (e: any, data: string) => {
   fileManager.openFolderInWindow(data, window);
 };
 
+const onConvert = (e: any, files: {
+  path: string
+  language: string
+}[]) => {
+  windowManager.sendClose(e.sender);
+  files.forEach(file => {
+    const data = readFileSync(file.path, 'utf8');
+    console.log(file.path.replace(`${file.language}\\translations.json`, `${file.language}.json`));
+    writeFileSync(file.path.replace(`${file.language}\\translations.json`, `${file.language}.json`), data);
+    unlinkSync(file.path);
+    rmdirSync(file.path.replace('\\translations.json', ''));
+  });
+  onOpen(e, files[0].path.replace(`${files[0].language}\\translations.json`, ''));
+}
+
 const onDataChanged = (e: any, data: boolean) => {
   const window = BrowserWindow.fromWebContents(e.sender);
   if (!window) return;
@@ -77,6 +93,7 @@ const onRecentFolders = (e: any) => {
 const registerAppEvents = () => {
   ipcMain.on(ipcMessages.open, onOpen);
   ipcMain.on(ipcMessages.save, onSave);
+  ipcMain.on(ipcMessages.convert, onConvert);
   ipcMain.on(ipcMessages.dataChanged, onDataChanged);
   ipcMain.on(ipcMessages.saveSettings, onSaveSettings);
   ipcMain.on(ipcMessages.settings, onGetSettings);

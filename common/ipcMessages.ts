@@ -1,5 +1,7 @@
 export const save = 'save';
 export const saveComplete = 'saveComplete';
+export const convert = 'convert';
+export const convertComplete = 'convertComplete';
 export const open = 'open';
 export const dataChanged = 'dataChanged';
 export const showContextMenu = 'showContextMenu';

@@ -65,7 +65,7 @@
         </v-row>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px;">
       {{ hint() }}
       <v-btn v-if="isTranslationEnabled" color="primary" @click="translate">
         Translate

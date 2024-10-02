@@ -36,9 +36,25 @@ export const translate = async (
       );
       return response.data[targetLanguage];
     } else if (settings.translationEngine === 'deepl') {
-    
+      const response = await fetchAPI(
+        'https://translator.iobroker.in',
+        'POST',
+        {
+          text,
+          service: 'deepl',
+        }
+      );
+      return response.data[targetLanguage];
     } else if (settings.translationEngine === 'aws') {
-
+      const response = await fetchAPI(
+        'https://translator.iobroker.in',
+        'POST',
+        {
+          text,
+          service: 'aws',
+        }
+      );
+      return response.data[targetLanguage];
     } else {
       const response = await fetchAPI(
         `${GOOGLE_TRANSLATE_URL}?key=${settings.googleTranslateApiKey}`,

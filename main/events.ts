@@ -52,7 +52,6 @@ const onConvert = (e: any, files: {
   windowManager.sendClose(e.sender);
   files.forEach(file => {
     const data = readFileSync(file.path, 'utf8');
-    console.log(file.path.replace(`${file.language}\\translations.json`, `${file.language}.json`));
     writeFileSync(file.path.replace(`${file.language}\\translations.json`, `${file.language}.json`), data);
     unlinkSync(file.path);
     rmdirSync(file.path.replace('\\translations.json', ''));
